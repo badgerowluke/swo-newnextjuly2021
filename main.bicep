@@ -3,6 +3,7 @@ The Azure Team as already built a good number of basic snippets to use
 
 az deployment sub create -f main.bicep -l northcentralus --parameters main.bicep.local.json
 az deployment sub what-if -f main.bicep -l northcentralus --parameters main.bicep.local.json
+az deployment group create -f main.bicep -g newnext2021
 */
 
 
