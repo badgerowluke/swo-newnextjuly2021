@@ -3,7 +3,8 @@ The Azure Team as already built a good number of basic snippets to use
 
 az deployment sub create -f main.bicep -l northcentralus --parameters main.bicep.local.json
 az deployment sub what-if -f main.bicep -l northcentralus --parameters main.bicep.local.json
-az deployment group create -f main.bicep -g newnext2021
+az deployment group create -f main.bicep -g newnext2021 --parameters main.bicep.local.json
+az deployment group what-if -f main.bicep -g newnext2021 --parameters main.bicep.local.json
 */
 
 
@@ -51,55 +52,28 @@ resource kvName_resource 'Microsoft.KeyVault/vaults@2019-09-01' = {
   }
 }
 
-resource dbserver 'Microsoft.Sql/servers@2021-02-01-preview' = {
-  name: 'asqlserver-2021-newnext'
-  location: rg.location
-
-  properties: {
-    administratorLogin:'SogetiSA'
-    administratorLoginPassword: serveradminpwd
-    version: '12.0'
+module persistence 'modules/storage.bicep' = {
+  name: 'db-deploy'
+  params: {
+    location: rg.location
+    serveradminpwd: serveradminpwd
   }
 }
 
-resource sqldb 'Microsoft.Sql/servers/databases@2021-02-01-preview' = {
-  parent: dbserver
-  location: rg.location
-  name: 'sqldb-2021-newnext'
-  sku: {
-    name: 'Basic'
-  }
-
-  properties: {
-    collation: 'SQL_Latin1_General_CP1_CI_AS'
-    maxSizeBytes: 1073741824
+module monitoring 'modules/monitoring.bicep' = {
+  name: 'monitor-deploy'
+  params: {
+    appName:'monitor-newnext2021-app'
+    location: rg.location
   }
 }
 
-resource appInsights 'Microsoft.Insights/components@2015-05-01' = {
-  name: 'newnext-2021-app-insights'
-  location: rg.location
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    Request_Source: 'rest'
-  }
-}
-
-resource appplan 'Microsoft.Web/serverfarms@2021-01-15' = {
-  name: 'app-plan'
-  location: rg.location
-  sku: {
-    tier: 'Free'
-    name: 'F1'
-  }
-}
-
-resource app 'Microsoft.Web/sites@2021-01-15' = {
-  name: 'newnext2021-app'
-  location: rg.location
-  properties: {
-    serverFarmId: appplan.id
+module app 'modules/app.bicep' = {
+  name: 'app-deploy'
+  params: {
+    location: rg.location
+    appname: 'app-newnext2021'
+    
   }
 }
 
