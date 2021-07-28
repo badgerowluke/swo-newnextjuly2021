@@ -10,3 +10,5 @@ I will do my best to keep a register of the changes, other than the commit logs,
 
 [VS Code Plugin](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep)
 
+[Azure Quickstarts](https://github.com/Azure/azure-quickstart-templates) (primarily ARM, some of these have bicep templates as well)
+
