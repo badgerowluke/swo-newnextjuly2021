@@ -1,5 +1,5 @@
 locals {
-  administrator_password = base64decode(var.admin_password)
+  administrator_password = var.admin_password
 }
 
 resource "azurerm_mssql_server" "sqldb_server" {

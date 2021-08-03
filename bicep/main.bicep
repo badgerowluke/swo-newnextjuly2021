@@ -39,7 +39,7 @@ param tenantId string
 param rg object = resourceGroup()
 
 module kv 'modules/vault.bicep' = {
-  name: 'kv-newnext2021'
+  name: 'kv-newnext2021-newhire2021'
   params: {
     location: rg.location
     tenantId: tenantId
