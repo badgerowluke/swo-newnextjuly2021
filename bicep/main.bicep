@@ -38,17 +38,12 @@ param tenantId string
 */
 param rg object = resourceGroup()
 
-resource kvName_resource 'Microsoft.KeyVault/vaults@2019-09-01' = {
+module kv 'modules/vault.bicep' = {
   name: 'kv-newnext2021'
-  location: rg.location
-  properties: {
-    sku: {
-      name: 'standard'
-      family: 'A'
-    }
+  params: {
+    location: rg.location
     tenantId: tenantId
-    accessPolicies: [
-    ]
+    
   }
 }
 
